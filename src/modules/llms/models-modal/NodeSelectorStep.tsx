@@ -15,6 +15,7 @@ import {
   Link as JoyLink,
 } from '@mui/joy';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 type Choice = 'own' | 'global';
 
@@ -30,21 +31,29 @@ export function NodeSelectorStep({
   githubURL = 'https://github.com/DecentraLandMind',
 }: NodeSelectorStepProps) {
   const [choice, setChoice] = React.useState<Choice>('own');
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const handleContinue = async () => {
+    setIsLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 300));
+    onContinue(choice);
+    setIsLoading(false);
+  };
 
   return (
     <Box sx={{ display: 'grid', gap: 2 }}>
       <Box sx={{ display: 'grid', gap: 0.5 }}>
         <Typography
-          level="h2"                
+          level="h2"
           sx={{
             fontWeight: 800,
             letterSpacing: '-0.01em',
           }}
         >
-          Choose your Type
+          Specify Your Usage Model
         </Typography>
         <Typography level="body-lg" sx={{ color: 'text.tertiary' }}>
-          Select how you want to connect to DecentraMind.
+          How would you like to use Egregore?
         </Typography>
       </Box>
 
@@ -55,10 +64,10 @@ export function NodeSelectorStep({
           sx={{
             fontWeight: 600,
             mb: 1,
-            textAlign: 'center',   
+            textAlign: 'center',
           }}
         >
-          Select type
+          Select deployment type
         </FormLabel>
 
         <RadioGroup
@@ -72,7 +81,16 @@ export function NodeSelectorStep({
           <Sheet
             variant={choice === 'own' ? 'solid' : 'outlined'}
             color={choice === 'own' ? 'primary' : 'neutral'}
-            sx={{ p: 2.5, borderRadius: 'lg', cursor: 'pointer' }}
+            sx={{
+              p: 2.5,
+              borderRadius: 'lg',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease-in-out',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: 'sm',
+              }
+            }}
           >
             <Radio
               value="own"
@@ -80,9 +98,9 @@ export function NodeSelectorStep({
               disableIcon
               label={
                 <Box sx={{ display: 'grid', gap: 0.25 }}>
-                  <Typography level="title-sm">My box</Typography>
+                  <Typography level="title-sm">Local Model</Typography>
                   <Typography level="body-xs" sx={{ color: 'text.tertiary' }}>
-                    Use your own machine/server to configure and run models. Full control & privacy.
+                    Model runs securely within your environment with complete control and privacy.
                   </Typography>
                 </Box>
               }
@@ -92,7 +110,16 @@ export function NodeSelectorStep({
           <Sheet
             variant={choice === 'global' ? 'solid' : 'outlined'}
             color={choice === 'global' ? 'primary' : 'neutral'}
-            sx={{ p: 2.5, borderRadius: 'lg', cursor: 'pointer' }}
+            sx={{
+              p: 2.5,
+              borderRadius: 'lg',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease-in-out',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: 'sm',
+              }
+            }}
           >
             <Radio
               value="global"
@@ -100,9 +127,9 @@ export function NodeSelectorStep({
               disableIcon
               label={
                 <Box sx={{ display: 'grid', gap: 0.25 }}>
-                  <Typography level="title-sm">Global node</Typography>
+                  <Typography level="title-sm">Global Network</Typography>
                   <Typography level="body-xs" sx={{ color: 'text.tertiary' }}>
-                    Connect to a public DecentraMind node. Fast onboarding, shared capacity.
+                    Connect to any preferred node worldwide with fast deployment and shared resources.
                   </Typography>
                 </Box>
               }
@@ -111,7 +138,14 @@ export function NodeSelectorStep({
         </RadioGroup>
       </FormControl>
 
-      <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end', flexWrap: 'wrap', mt: 2 }}>
+      <Box sx={{
+        display: 'flex',
+        gap: 2,
+        justifyContent: isMobile ? 'stretch' : 'space-between',
+        alignItems: 'center',
+        flexDirection: isMobile ? 'column' : 'row',
+        mt: 3
+      }}>
         <Button
           variant="outlined"
           color="neutral"
@@ -120,10 +154,43 @@ export function NodeSelectorStep({
           target="_blank"
           rel="noopener noreferrer"
           startDecorator={<GitHubIcon />}
+          sx={{
+            minHeight: 44,
+            px: 3,
+            fontWeight: 500,
+            borderRadius: 'lg',
+            transition: 'all 0.2s ease-in-out',
+            '&:hover': {
+              transform: 'translateY(-1px)',
+              boxShadow: 'sm',
+            }
+          }}
         >
           Learn More
         </Button>
-        <Button variant="solid" color="primary" onClick={() => onContinue(choice)}>
+
+        <Button
+          variant="solid"
+          color="primary"
+          onClick={handleContinue}
+          loading={isLoading}
+          endDecorator={!isLoading && <ArrowForwardIcon />}
+          sx={{
+            minHeight: 44,
+            px: 4,
+            fontWeight: 600,
+            borderRadius: 'lg',
+            minWidth: isMobile ? '100%' : 140,
+            transition: 'all 0.2s ease-in-out',
+            '&:hover': {
+              transform: 'translateY(-1px)',
+              boxShadow: 'md',
+            },
+            '&:active': {
+              transform: 'translateY(0px)',
+            }
+          }}
+        >
           Continue
         </Button>
       </Box>

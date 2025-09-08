@@ -1,4 +1,3 @@
-// src/common/components/WalletGate.tsx
 'use client';
 
 import * as React from 'react';
@@ -12,18 +11,17 @@ import {
   Link as JoyLink,
   Sheet,
   Typography,
+  useColorScheme, 
 } from '@mui/joy';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import Image from 'next/image';
 import { NodeSelectorStep } from '~/modules/llms/models-modal/NodeSelectorStep';
-import { GlobalNodeComingSoon } from '~/modules/llms/models-modal/GlobalNodeComingSoon';
-import { NodeConfigStep } from '~/modules/llms/models-modal/NodeConfigStep';
-import { nodeChoiceActions } from '~/common/stores/nodeChoice.store';
+import { useNodeChoice, nodeChoiceActions } from '~/common/stores/nodeChoice.store';
 
-const GITHUB_URL = 'https://github.com/DecentraLandMind';
+const GITHUB_URL = 'https://github.com';
 
-type Phase = 'preconnect' | 'select' | 'config' | 'globalSoon' | 'done';
+type Phase = 'preconnect' | 'select' | 'done';
 
 interface WalletGateProps {
   children: React.ReactNode;
@@ -42,29 +40,36 @@ function HeaderArt({ src }: { src: string }) {
 export default function WalletGate({ children }: WalletGateProps) {
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
+
+  const { mode: colorMode } = useColorScheme();
+  const isDark = colorMode === 'dark';
+
+  const nodeChoice = useNodeChoice();
+
   const [phase, setPhase] = React.useState<Phase>('preconnect');
 
   React.useEffect(() => {
-    if (isConnected && phase === 'preconnect') setPhase('select');
-  }, [isConnected, phase]);
-
-  const handleNodeSelect = (choice: 'own' | 'global') => {
-    if (choice === 'own') {
-      nodeChoiceActions.set('own');
-      setPhase('config');
+    if (isConnected) {
+      if (nodeChoice !== 'unset') {
+        setPhase('done');
+      } else {
+        setPhase('select');
+      }
     } else {
-      nodeChoiceActions.set('global');
-      setPhase('globalSoon');
+      setPhase('preconnect');
+    }
+  }, [isConnected, nodeChoice]);
+
+  const handleConnectWallet = () => {
+    if (openConnectModal) {
+      openConnectModal();
     }
   };
 
-  const handleNodeConfig = (url: string, key: string) => {
-    nodeChoiceActions.setConfig({ url, key });
+  const handleNodeSelect = (choice: 'own' | 'global') => {
+    nodeChoiceActions.set(choice);
     setPhase('done');
   };
-
-  const handleConfigBack = () => setPhase('select');
-  const handleGlobalBack = () => setPhase('select');
 
   if (phase === 'done') return <>{children}</>;
 
@@ -78,6 +83,7 @@ export default function WalletGate({ children }: WalletGateProps) {
         display: 'grid',
         placeItems: 'center',
         px: 2,
+        backgroundColor: isDark ? 'background.body' : 'background.body',
       }}
     >
       <Sheet
@@ -90,13 +96,16 @@ export default function WalletGate({ children }: WalletGateProps) {
           p: { xs: 3, sm: 4 },
           position: 'relative',
           overflow: 'hidden',
-          background:
-            'linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))',
+          background: isDark
+            ? 'linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))'
+            : 'linear-gradient(135deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01))',
           backdropFilter: 'blur(4px)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          border: isDark
+            ? '1px solid rgba(255,255,255,0.08)'
+            : '1px solid rgba(0,0,0,0.08)',
           display: 'flex',
           flexDirection: 'column',
-          gap: 2, 
+          gap: 2,
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
@@ -106,12 +115,10 @@ export default function WalletGate({ children }: WalletGateProps) {
             size="sm"
             startDecorator={<RocketLaunchIcon />}
           >
-            DecentraMind
+            Egregore
           </Chip>
         </Box>
-        
-        {/* <HeaderArt src="/images/covers/setup.png" /> */}
-        
+
         {phase === 'preconnect' && (
           <Box
             sx={{
@@ -121,22 +128,22 @@ export default function WalletGate({ children }: WalletGateProps) {
               mx: 'auto',
               width: '100%',
               textAlign: 'left',
-              mt: 1, 
+              mt: 1,
             }}
           >
             <Typography
               level="h3"
-              sx={{ fontWeight: 800, letterSpacing: '-0.01em'}}
+              sx={{ fontWeight: 800, letterSpacing: '-0.01em' }}
             >
-              Welcome to DecentraMind
+              Welcome to Egregore
             </Typography>
 
             <Box sx={{ display: 'grid', gap: 0.5 }}>
               <Typography level="body-md" sx={{ color: 'text.tertiary' }}>
-                A framework to run decentralized language models.
+                Here is where you can harness the ultimate power of AI with complete privacy.
               </Typography>
               <Typography level="body-sm" sx={{ color: 'text.tertiary' }}>
-                To continue, please connect your wallet.
+                Built on decentralized infrastructure powered by Functionland, developed by the Egregore team.
               </Typography>
             </Box>
 
@@ -154,7 +161,7 @@ export default function WalletGate({ children }: WalletGateProps) {
                 size="md"
                 variant="solid"
                 color="primary"
-                onClick={() => openConnectModal?.()}
+                onClick={handleConnectWallet}
               >
                 Connect Wallet
               </Button>
@@ -173,31 +180,12 @@ export default function WalletGate({ children }: WalletGateProps) {
             </Box>
           </Box>
         )}
-        
+
         {phase === 'select' && (
           <Box sx={{ maxWidth: contentMaxWidth, mx: 'auto', width: '100%', mt: 1 }}>
             <NodeSelectorStep
               isMobile={false}
               onContinue={handleNodeSelect}
-              githubURL={GITHUB_URL}
-            />
-          </Box>
-        )}
-
-        {phase === 'config' && (
-          <Box sx={{ maxWidth: contentMaxWidth, mx: 'auto', width: '100%', mt: 1 }}>
-            <NodeConfigStep
-              onContinue={handleNodeConfig}
-              onBack={handleConfigBack}
-              githubURL={GITHUB_URL}
-            />
-          </Box>
-        )}
-
-        {phase === 'globalSoon' && (
-          <Box sx={{ maxWidth: contentMaxWidth, mx: 'auto', width: '100%', mt: 1 }}>
-            <GlobalNodeComingSoon
-              onBack={handleGlobalBack}
               githubURL={GITHUB_URL}
             />
           </Box>

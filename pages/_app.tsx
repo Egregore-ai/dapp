@@ -17,7 +17,7 @@ import '~/common/styles/app.styles.css';
 
 // RainbowKit / wagmi / React Query
 import '@rainbow-me/rainbowkit/styles.css';
-import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
+import { RainbowKitProvider, darkTheme, lightTheme } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { wagmiConfig } from '~/modules/lib/wagmi';
 
@@ -34,12 +34,45 @@ import { ProviderTheming } from '~/common/providers/ProviderTheming';
 import { SnackbarInsert } from '~/common/components/snackbar/SnackbarInsert';
 import { hasGoogleAnalytics, OptionalGoogleAnalytics } from '~/common/components/3rdparty/GoogleAnalytics';
 import { hasPostHogAnalytics, OptionalPostHogAnalytics } from '~/common/components/3rdparty/PostHogAnalytics';
+import { useColorScheme } from '@mui/joy';
 
-const queryClient = new QueryClient(); 
+const queryClient = new QueryClient();
+
+function RainbowKitThemeProvider({ children }: { children: React.ReactNode }) {
+  const { mode } = useColorScheme();
+
+  const rainbowKitTheme = React.useMemo(() => {
+    if (mode === 'dark') {
+      return darkTheme({
+        accentColor: '#3b82f6',
+        accentColorForeground: 'white',
+        borderRadius: 'medium',
+        fontStack: 'system',
+        overlayBlur: 'small',
+      });
+    } else {
+      return lightTheme({
+        accentColor: '#2563eb',
+        accentColorForeground: 'white',
+        borderRadius: 'medium',
+        fontStack: 'system',
+        overlayBlur: 'small',
+      });
+    }
+  }, [mode]);
+
+  return (
+    <RainbowKitProvider theme={rainbowKitTheme}>
+      {children}
+    </RainbowKitProvider>
+  );
+}
 
 function TopBarVisibilityGuard() {
   const { isConnected } = useAccount();
+  return null;
 }
+
 const Dapp_AGI_App = ({ Component, emotionCache, pageProps }: MyAppProps) => {
   const getLayout = (Component as any).getLayout ?? ((page: any) => page);
 
@@ -50,15 +83,16 @@ const Dapp_AGI_App = ({ Component, emotionCache, pageProps }: MyAppProps) => {
         <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no' />
       </Head>
 
-       <WagmiProvider config={wagmiConfig}>
+      <WagmiProvider config={wagmiConfig}>
         <QueryClientProvider client={queryClient}>
-          <RainbowKitProvider theme={darkTheme()}>
-            <ProviderTheming emotionCache={emotionCache}>
+          <ProviderTheming emotionCache={emotionCache}>
+            <RainbowKitThemeProvider>
               <ProviderSingleTab>
                 <ProviderBackendCapabilities>
                   <ErrorBoundary outer>
                     <ProviderBootstrapLogic>
                       <SnackbarInsert />
+                      <TopBarVisibilityGuard />
 
                       <WalletGate>
                         {getLayout(<Component {...pageProps} />)}
@@ -69,8 +103,8 @@ const Dapp_AGI_App = ({ Component, emotionCache, pageProps }: MyAppProps) => {
                   </ErrorBoundary>
                 </ProviderBackendCapabilities>
               </ProviderSingleTab>
-            </ProviderTheming>
-          </RainbowKitProvider>
+            </RainbowKitThemeProvider>
+          </ProviderTheming>
         </QueryClientProvider>
       </WagmiProvider>
 

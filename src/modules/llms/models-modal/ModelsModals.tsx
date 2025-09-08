@@ -6,9 +6,9 @@ import { useModelsServices } from '~/common/stores/llms/llms.hooks';
 import { LLMOptionsModal } from './LLMOptionsModal';
 import { ModelsConfiguratorModal } from './ModelsConfiguratorModal';
 
-
 /**
  * This is here so we can lazy-load the ModelsModals component, which includes two medium-heavy modals.
+ * Now includes node choice validation to ensure users select their deployment type before configuring models.
  */
 export function ModelsModals() {
 
@@ -16,10 +16,9 @@ export function ModelsModals() {
   const { showModels, showModelOptions } = useOptimaModals();
   const { modelsServices, confServiceId, setConfServiceId } = useModelsServices();
 
-
   return <>
 
-    {/* Services Setup */}
+    {/* Services Setup - now includes node choice validation */}
     {showModels && (
       <ModelsConfiguratorModal
         modelsServices={modelsServices}

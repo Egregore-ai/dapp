@@ -6,6 +6,7 @@ import { Avatar, Badge, Box, Button, Chip, CircularProgress, Input, Sheet, Typog
 import { TooltipOutlined } from '~/common/components/TooltipOutlined';
 import { llmsStoreActions, llmsStoreState, useModelsStore } from '~/common/stores/llms/store-llms';
 import { useShallowStabilizer } from '~/common/util/hooks/useShallowObject';
+import { useNodeChoice } from '~/common/stores/nodeChoice.store';
 
 import type { IModelVendor } from '../vendors/IModelVendor';
 import { LLMVendorIcon } from '../components/LLMVendorIcon';
@@ -14,16 +15,19 @@ import { ModelVendorLMStudio } from '../vendors/lmstudio/lmstudio.vendor';
 import { ModelVendorLocalAI } from '../vendors/localai/localai.vendor';
 import { ModelVendorOllama } from '../vendors/ollama/ollama.vendor';
 import { ModelVendorOpenAI } from '../vendors/openai/openai.vendor';
+import { ModelVendorOpenRouter } from '../vendors/openrouter/openrouter.vendor';
 import { llmsUpdateModelsForServiceOrThrow } from '../llm.client';
 
 // configuration
-const WizardProviders: ReadonlyArray<WizardProvider> = [
+const AllWizardProviders: ReadonlyArray<WizardProvider> = [
+  // Global/Popular providers
   { cat: 'popular', vendor: ModelVendorOpenAI, settingsKey: 'oaiKey' } as const,
   { cat: 'popular', vendor: ModelVendorAnthropic, settingsKey: 'anthropicKey' } as const,
-  { cat: 'local', vendor: ModelVendorLocalAI, settingsKey: 'localAIHost' } as const,
+  { cat: 'popular', vendor: ModelVendorOpenRouter, settingsKey: 'openrouterKey' } as const,
+  // Local providers
   { cat: 'local', vendor: ModelVendorOllama, settingsKey: 'ollamaHost' } as const,
+  { cat: 'local', vendor: ModelVendorLocalAI, settingsKey: 'localAIHost' } as const,
   { cat: 'local', vendor: ModelVendorLMStudio, settingsKey: 'oaiHost', omit: true } as const,
-  // { vendor: ModelVendorOpenRouter, settingsKey: 'oaiKey' } as const,
 ] as const;
 
 type VendorCategory = 'popular' | 'local';
@@ -35,15 +39,10 @@ interface WizardProvider {
   omit?: boolean,
 }
 
-
 const _styles = {
-
   container: {
     margin: 'calc(-1 * var(--Card-padding, 1rem))',
     padding: 'var(--Card-padding)',
-    // paddingRight: 'calc(1.5 * var(--Card-padding))',
-    // background: 'linear-gradient(135deg, var(--joy-palette-primary-500), var(--joy-palette-primary-700))',
-    // background: 'linear-gradient(135deg, var(--joy-palette-background-level1), var(--joy-palette-background-level1))',
     display: 'grid',
     gap: 'calc(0.75 * var(--Card-padding))',
   } as const,
@@ -75,9 +74,7 @@ const _styles = {
     color: 'text.tertiary',
     fontSize: 'sm',
   } as const,
-
 } as const;
-
 
 function WizardProviderSetup(props: {
   provider: WizardProvider,
@@ -117,15 +114,12 @@ function WizardProviderSetup(props: {
       setLocalValue(serviceKeyValue || '');
   }, [serviceKeyValue, triggerValueLoad]);
 
-
   // derived
   const isLocal = providerCat === 'local';
   const valueName = isLocal ? 'server' : 'API Key';
   const { name: vendorName } = providerVendor;
 
-
   // handlers
-
   const handleTextChanged = React.useCallback((e: React.ChangeEvent) => {
     setLocalValue((e.target as HTMLInputElement).value);
   }, []);
@@ -165,34 +159,23 @@ function WizardProviderSetup(props: {
 
   }, [localValue, providerSettingsKey, providerVendor, valueName]);
 
-
   // memoed components
-
   const endButtons = React.useMemo(() => ((localValue || '') === (serviceKeyValue || '')) ? null : (
     <Box sx={{ display: 'flex', gap: 2 }}>
-      {/*<TooltipOutlined title='Clear Key'>*/}
-      {/*  <IconButton variant='outlined' color='neutral' onClick={handleClear}>*/}
-      {/*    <ClearIcon />*/}
-      {/*  </IconButton>*/}
-      {/*</TooltipOutlined>*/}
-      {/*<TooltipOutlined title='Confirm'>*/}
       <Button
         variant='solid' color='primary'
         onClick={handleSetServiceKeyValue}
-        // endDecorator={<CheckRoundedIcon />}
       >
         {!serviceKeyValue ? 'Confirm' : !localValue?.trim() ? 'Clear' : 'Update'}
       </Button>
-      {/*</TooltipOutlined>*/}
     </Box>
   ), [handleSetServiceKeyValue, localValue, serviceKeyValue]);
-
 
   // heuristics for warnings
   const isOnLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
 
   return props.isHidden ? null : providerOmit ? (
-    <Box sx={{ ..._styles.text1, my: 0, minHeight: '2.5rem' /* to mimic the other items */ }}>
+    <Box sx={{ ..._styles.text1, my: 0, minHeight: '2.5rem' }}>
       {!isOnLocalhost && <Typography level='body-xs'>
         Please make sure the addresses can be reached from &quot;{typeof window !== 'undefined' ? window.location.hostname : 'this server'}&quot;. If you are using a local service, you may need to use a public URL.
       </Typography>}
@@ -217,16 +200,6 @@ function WizardProviderSetup(props: {
 
         {/* Main key inputs */}
         <Box sx={{ flex: 1, display: 'grid' }}>
-
-          {/* Line 1 */}
-          {/*{!!props.serviceLabel && (*/}
-          {/*  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>*/}
-          {/*    /!*<props.vendorIcon />*!/*/}
-          {/*    <Box>{props.serviceLabel}</Box>*/}
-          {/*  </Box>*/}
-          {/*)}*/}
-
-          {/* Line 2 */}
           <Input
             fullWidth
             name={`wizard-settings-value-${providerVendor.id}`}
@@ -236,19 +209,12 @@ function WizardProviderSetup(props: {
             onChange={handleTextChanged}
             placeholder={`${vendorName} ${valueName}`}
             type={isLocal ? undefined : 'password'}
-            // error={!isValidKey}
-            // startDecorator={<props.vendorIcon />}
             endDecorator={endButtons}
           />
-
         </Box>
 
       </Box>
 
-      {/*{isLoading && <Typography level='body-xs' sx={{ ml: 7, px: 0.5 }}>Loading your models...</Typography>}*/}
-      {/*{!isLoading && !updateError && !!llmsCount && (*/}
-      {/*  <Typography level='body-xs' sx={{ ml: 7, px: 0.5 }}>{llmsCount} models added.</Typography>*/}
-      {/*)}*/}
       {!isLoading && !updateError && !serviceLLMsCount && !!serviceKeyValue && (
         <Typography level='body-xs' color='warning' sx={{ ml: 7, px: 0.5 }}>No models found.</Typography>
       )}
@@ -258,56 +224,59 @@ function WizardProviderSetup(props: {
   );
 }
 
-
 export function ModelsWizard(props: {
   isMobile: boolean,
   onSkip?: () => void,
   onSwitchToAdvanced?: () => void,
 }) {
 
-  // state
-  const [activeCategory, setActiveCategory] = React.useState<VendorCategory>('popular');
+  // external state
+  const nodeChoice = useNodeChoice();
+
+  // Filter providers based on node choice
+  const WizardProviders = React.useMemo(() => {
+    if (nodeChoice === 'own') {
+      // Show only local providers
+      return AllWizardProviders.filter(provider => provider.cat === 'local');
+    } else if (nodeChoice === 'global') {
+      // Show only popular/cloud providers
+      return AllWizardProviders.filter(provider => provider.cat === 'popular');
+    }
+    // Fallback to all providers if nodeChoice is unset (shouldn't happen due to validation)
+    return AllWizardProviders;
+  }, [nodeChoice]);
 
   // derived
-  const isLocal = activeCategory === 'local';
+  const isLocal = nodeChoice === 'own';
+  const sectionTitle = isLocal ? 'Local' : 'Popular';
+  const sectionDescription = isLocal ? 'the addresses of' : 'your API keys for';
 
   return (
     <Sheet variant='soft' sx={_styles.container}>
 
       <Box sx={props.isMobile ? _styles.text1Mobile : _styles.text1}>
         <Typography component='div' level='title-sm'>
-          Enter {isLocal ? 'the addresses of ' : 'your API keys for '}
-          <Chip variant={!isLocal ? 'solid' : 'outlined'} sx={{ mx: 0.25 }} onClick={() => setActiveCategory('popular')}>
-            Popular
-          </Chip>
-          <Chip variant={isLocal ? 'solid' : 'outlined'} sx={{ mx: 0.25 }} onClick={() => setActiveCategory('local')}>
-            Local
+          Enter {sectionDescription}{' '}
+          <Chip variant='solid' sx={{ mx: 0.25 }}>
+            {sectionTitle}
           </Chip>
           {' '}AI services below.
         </Typography>
-        {/*<Box sx={{ fontSize: 'sm', color: 'text.primary' }}>*/}
-        {/*  Enter API keys to connect your AI services.{' '}*/}
-        {/*  {!props.isMobile && <>Switch to <Box component='a' onClick={props.onSwitchToAdvanced} sx={{ textDecoration: 'underline', cursor: 'pointer' }}>Advanced</Box> for more options.</>}*/}
-        {/*</Box>*/}
       </Box>
-
+      
       {WizardProviders.map((provider, index) => (
         <WizardProviderSetup
           key={provider.vendor.id}
           provider={provider}
           isFirst={!index}
-          isHidden={provider.cat !== activeCategory}
+          isHidden={false} // No longer need to hide based on category since we filter the array
         />
       ))}
 
       <Box sx={props.isMobile ? _styles.text2Mobile : _styles.text2}>
-        {/*{!props.isMobile && <>Switch to <Box component='a' onClick={props.onSwitchToAdvanced} sx={{ textDecoration: 'underline', cursor: 'pointer' }}>Advanced</Box> to choose between {getModelVendorsCount()} services.</>}{' '}*/}
         {!props.isMobile && <>
           Switch to{' '}
           <Box component='a' onClick={props.onSwitchToAdvanced} sx={{ textDecoration: 'underline', cursor: 'pointer' }}>advanced configuration</Box>
-          {/*<Chip variant={isLocal ? 'solid' : 'outlined'} sx={{ ml: 0.25 }} onClick={props.onSwitchToAdvanced}>*/}
-          {/*  more services*/}
-          {/*</Chip>*/}
           {' '}for more services,
         </>}{' '}
         or <Box component='a' onClick={props.onSkip} sx={{ textDecoration: 'underline', cursor: 'pointer' }}>skip</Box> for now and do it later.

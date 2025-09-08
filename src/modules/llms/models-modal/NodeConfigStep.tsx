@@ -14,6 +14,7 @@ import {
 } from '@mui/joy';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNodeConfig } from '~/common/stores/nodeChoice.store';
 
 interface NodeConfigStepProps {
   onContinue: (key: string) => void;
@@ -26,8 +27,18 @@ export function NodeConfigStep({
   onBack,
   githubURL = 'https://github.com/DecentraLandMind',
 }: NodeConfigStepProps) {
-  const [key, setKey] = React.useState('');
+  const nodeConfig = useNodeConfig();
+  
+  // Initialize with stored key if exists
+  const [key, setKey] = React.useState(nodeConfig.key || '');
   const [errors, setErrors] = React.useState<{ key?: string }>({});
+
+  // Update local state if store changes
+  React.useEffect(() => {
+    if (nodeConfig.key && nodeConfig.key !== key) {
+      setKey(nodeConfig.key);
+    }
+  }, [nodeConfig.key]);
 
   const handleContinue = () => {
     const newErrors: { key?: string } = {};
@@ -56,7 +67,10 @@ export function NodeConfigStep({
           Configure Your Box
         </Typography>
         <Typography level="body-lg" sx={{ color: 'text.tertiary' }}>
-          Enter your authentication key to connect.
+          {nodeConfig.key 
+            ? 'Update your authentication key or continue with the existing one.'
+            : 'Enter your authentication key to connect.'
+          }
         </Typography>
       </Box>
 
@@ -64,10 +78,17 @@ export function NodeConfigStep({
 
       <Box sx={{ display: 'grid', gap: 2, maxWidth: 480, mx: 'auto', width: '100%' }}>
         <FormControl error={!!errors.key}>
-          <FormLabel sx={{ fontWeight: 600 }}>Authentication Key</FormLabel>
+          <FormLabel sx={{ fontWeight: 600 }}>
+            Authentication Key
+            {nodeConfig.key && (
+              <Typography level="body-xs" sx={{ color: 'text.tertiary', fontWeight: 400, ml: 1 }}>
+                (Previously saved)
+              </Typography>
+            )}
+          </FormLabel>
           <Input
             type="password"
-            placeholder="Enter your authentication key"
+            placeholder={nodeConfig.key ? 'Enter new key or keep existing' : 'Enter your authentication key'}
             value={key}
             onChange={(e) => {
               setKey(e.target.value);
@@ -79,6 +100,12 @@ export function NodeConfigStep({
           {errors.key && (
             <Typography level="body-xs" sx={{ color: 'danger.500', mt: 0.5 }}>
               {errors.key}
+            </Typography>
+          )}
+          
+          {nodeConfig.key && (
+            <Typography level="body-xs" sx={{ color: 'text.tertiary', mt: 0.5 }}>
+              Leave empty to keep your existing key
             </Typography>
           )}
         </FormControl>
@@ -110,9 +137,9 @@ export function NodeConfigStep({
             variant="solid" 
             color="primary" 
             onClick={handleContinue}
-            disabled={!key.trim()}
+            disabled={!key.trim() && !nodeConfig.key}
           >
-            Connect
+            {nodeConfig.key && !key.trim() ? 'Continue with Existing Key' : 'Connect'}
           </Button>
         </Box>
       </Box>

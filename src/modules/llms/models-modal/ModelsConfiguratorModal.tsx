@@ -1,7 +1,7 @@
 // src/modules/llms/models/ModelsConfiguratorModal.tsx
 import * as React from 'react';
 
-import { Box, Button, Divider } from '@mui/joy';
+import { Box, Button, Divider, Typography } from '@mui/joy';
 
 import type { DModelsService } from '~/common/stores/llms/llms.service.types';
 import { AppBreadcrumbs } from '~/common/components/AppBreadcrumbs';
@@ -9,11 +9,13 @@ import { GoodModal } from '~/common/components/modals/GoodModal';
 import { optimaActions } from '~/common/layout/optima/useOptima';
 import { useHasLLMs } from '~/common/stores/llms/llms.hooks';
 import { useIsMobile } from '~/common/components/useMatchMedia';
+import { useNodeChoice } from '~/common/stores/nodeChoice.store';
 
 import { LLMVendorSetup } from '../components/LLMVendorSetup';
 import { ModelsList } from './ModelsList';
 import { ModelsServiceSelector } from './ModelsServiceSelector';
 import { ModelsWizard } from './ModelsWizard';
+import { NodeChoiceRequiredModal } from './NodeChoiceRequiredModal';
 
 // configuration
 const MODELS_WIZARD_ENABLE_INITIALLY = true;
@@ -40,6 +42,10 @@ export function ModelsConfiguratorModal(props: {
   // external state
   const isMobile = useIsMobile();
   const hasLLMs = useHasLLMs();
+  const nodeChoice = useNodeChoice();
+
+  // Check if node choice is required
+  const isNodeChoiceRequired = nodeChoice === 'unset';
 
   // active service with fallback to the last added service
   const activeServiceId =
@@ -61,6 +67,11 @@ export function ModelsConfiguratorModal(props: {
   // handlers
   const handleShowAdvanced = React.useCallback(() => setTab('setup'), []);
   const handleShowWizard = React.useCallback(() => setTab('wizard'), []);
+
+  // If node choice is required, show the node choice modal instead
+  if (isNodeChoiceRequired) {
+    return <NodeChoiceRequiredModal />;
+  }
 
   // start button
   const startButton = React.useMemo(() => {
@@ -88,6 +99,9 @@ export function ModelsConfiguratorModal(props: {
       );
     return undefined;
   }, [handleShowAdvanced, handleShowWizard, hasAnyServices, isMobile, isTabWizard]);
+
+  // Get section title based on node choice
+  const sectionTitle = nodeChoice === 'own' ? 'Enter the addresses of Local' : 'Popular';
 
   return (
     <GoodModal
@@ -125,6 +139,8 @@ export function ModelsConfiguratorModal(props: {
             modelsServices={modelsServices}
             selectedServiceId={activeServiceId}
             setSelectedServiceId={setConfServiceId}
+            nodeChoice={nodeChoice}
+            sectionTitle={sectionTitle}
           />
           <Divider sx={activeService ? undefined : { visibility: 'hidden' }} />
           <Box sx={{ display: 'grid', gap: 'var(--Card-padding)' }}>
