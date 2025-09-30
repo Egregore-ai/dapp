@@ -5,6 +5,7 @@ import { backendRouter } from '~/modules/backend/backend.router';
 import { elevenlabsRouter } from '~/modules/elevenlabs/elevenlabs.router';
 import { googleSearchRouter } from '~/modules/google/search.router';
 import { llmAnthropicRouter } from '~/modules/llms/server/anthropic/anthropic.router';
+import { llmEgregoreRouter } from '~/modules/llms/server/egregore/egregore.router';
 import { llmOllamaRouter } from '~/modules/llms/server/ollama/ollama.router';
 import { llmOpenAIRouter } from '~/modules/llms/server/openai/openai.router';
 import { youtubeRouter } from '~/modules/youtube/youtube.router';
@@ -18,6 +19,7 @@ export const appRouterEdge = createTRPCRouter({
   elevenlabs: elevenlabsRouter,
   googleSearch: googleSearchRouter,
   llmAnthropic: llmAnthropicRouter,
+  llmEgregore: llmEgregoreRouter,
   llmOllama: llmOllamaRouter,
   llmOpenAI: llmOpenAIRouter,
   youtube: youtubeRouter,

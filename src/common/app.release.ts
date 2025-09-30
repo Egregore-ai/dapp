@@ -14,8 +14,8 @@ export const Release = {
   TenantSlug: 'open',
 
   App: {
-    versionCode: '1.1.0',
-    versionName: 'Dapp-AGI',
+    versionCode: '1.1.2',
+    versionName: 'Egregore',
   },
 
   // Future compatibility
@@ -65,5 +65,5 @@ export const Release = {
 
 export const BaseProduct = {
   ReleaseNotes: '',
-  SupportForm: (_userId?: string) => 'https://github.com',
+  SupportForm: (_userId?: string) => 'https://github.com/Egregore-ai',
 } as const;

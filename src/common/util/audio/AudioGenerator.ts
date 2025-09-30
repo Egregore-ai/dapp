@@ -347,7 +347,7 @@ export namespace AudioGenerator {
   }
 
 
-  // Dapp-AGI Sounds
+  // Egregore Sounds
 
   export function chatAutoSend(options: SoundOptions = {}) {
     const ctx = singleContext();

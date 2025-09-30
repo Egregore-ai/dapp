@@ -11,6 +11,7 @@ import { useNodeChoice } from '~/common/stores/nodeChoice.store';
 import type { IModelVendor } from '../vendors/IModelVendor';
 import { LLMVendorIcon } from '../components/LLMVendorIcon';
 import { ModelVendorAnthropic } from '../vendors/anthropic/anthropic.vendor';
+import { ModelVendorEgregore } from '../vendors/egregore/egregore.vendor';
 import { ModelVendorLMStudio } from '../vendors/lmstudio/lmstudio.vendor';
 import { ModelVendorLocalAI } from '../vendors/localai/localai.vendor';
 import { ModelVendorOllama } from '../vendors/ollama/ollama.vendor';
@@ -26,6 +27,7 @@ const AllWizardProviders: ReadonlyArray<WizardProvider> = [
   { cat: 'popular', vendor: ModelVendorOpenRouter, settingsKey: 'openrouterKey' } as const,
   // Local providers
   { cat: 'local', vendor: ModelVendorOllama, settingsKey: 'ollamaHost' } as const,
+  { cat: 'local', vendor: ModelVendorEgregore, settingsKey: 'egregoreHost' } as const,
   { cat: 'local', vendor: ModelVendorLocalAI, settingsKey: 'localAIHost' } as const,
   { cat: 'local', vendor: ModelVendorLMStudio, settingsKey: 'oaiHost', omit: true } as const,
 ] as const;

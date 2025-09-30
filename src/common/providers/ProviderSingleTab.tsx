@@ -9,7 +9,7 @@ import { useSingleTabEnforcer } from '../components/useSingleTabEnforcer';
 export const ProviderSingleTab = (props: { disabled?: boolean, children: React.ReactNode }) => {
 
   // state
-  const isSingleTab = useSingleTabEnforcer('dapp-agi-tabs');
+  const isSingleTab = useSingleTabEnforcer('Egregore-tabs');
 
   // pass-through until we know for sure that other tabs are open
   if (props.disabled || isSingleTab === null || isSingleTab)

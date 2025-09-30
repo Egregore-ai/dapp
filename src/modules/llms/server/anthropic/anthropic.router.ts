@@ -24,7 +24,7 @@ const DEFAULT_ANTHROPIC_HEADERS = {
   // 'anthropic-dangerous-direct-browser-access': 'true',
 
   // Used for instance by Claude Code - shall we set it
-  // 'x-app': 'dapp-agi',
+  // 'x-app': 'Egregore',
 } as const;
 
 const DEFAULT_ANTHROPIC_BETA_FEATURES: string[] = [

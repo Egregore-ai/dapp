@@ -1,6 +1,6 @@
 {
-  "name": "dapp-AGI",
-  "short_name": "dapp-AGI",
+  "name": "Egregore",
+  "short_name": "Egregore",
   "theme_color": "#32383E",
   "background_color": "#9FA6AD",
   "description": "Your Generative AI Suite",
@@ -37,7 +37,7 @@
     {
       "action": "/link/share_target",
       "accept": {
-        "application/big-agi": [
+        "application/Egregore": [
           ".agi",
           ".agi.json"
         ]

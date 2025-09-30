@@ -107,7 +107,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
             <div className='vivided'>
               <h2 className='heading'>Oops, we hit a snag</h2>
               <div className='message'>
-                <p style={{ fontWeight: 500 }}>Something broke; this shouldn&apos;t happen.{outer ? ' Please try reloading Dapp-AGI.' : ''}</p>
+                <p style={{ fontWeight: 500 }}>Something broke; this shouldn&apos;t happen.{outer ? ' Please try reloading Egregore.' : ''}</p>
                 {outer && (
                   <p style={{ fontWeight: 500 }}>
                     {' '}If the issue persists, please{' '}
@@ -132,7 +132,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
             <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
               {outer ? (
                 <button className='button' onClick={() => window.location.reload()}>
-                  Reload Dapp-AGI
+                  Reload Egregore
                 </button>
               ) : (
                 <button className='button' onClick={() => this.resetErrorBoundary()}>

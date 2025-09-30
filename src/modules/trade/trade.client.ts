@@ -67,7 +67,7 @@ export async function openConversationsAtRestPicker(): Promise<FileWithHandle[] 
   try {
     return await fileOpen({
       description: `${Brand.Title.Base} JSON Conversations`,
-      mimeTypes: ['application/json', 'application/dapp-agi'],
+      mimeTypes: ['application/json', 'application/Egregore'],
       multiple: true,
     });
   } catch (error) {
@@ -144,7 +144,7 @@ export async function downloadAllJsonV1B() {
   // save file
   await fileSave(blob, {
     fileName: `backup_chats_${window?.location?.hostname || 'all'}_${payload.conversations.length}_${prettyTimestampForFilenames(false)}.agi.json`,
-    // mimeTypes: ['application/json', 'application/dapp-agi'],
+    // mimeTypes: ['application/json', 'application/Egregore'],
     extensions: ['.json'],
   }).catch(() => null);
 }

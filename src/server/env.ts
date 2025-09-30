@@ -36,6 +36,9 @@ export const env = createEnv({
     // LLM: Ollama
     OLLAMA_API_HOST: z.url().optional(),
 
+    // LLM: Egregore
+    EGREGORE_API_HOST: z.url().optional(),
+
     // LLM: OpenRouter
     OPENROUTER_API_KEY: z.string().optional(),
 

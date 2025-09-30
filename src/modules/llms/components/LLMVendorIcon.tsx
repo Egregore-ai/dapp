@@ -11,6 +11,7 @@ import { PhRobot } from '~/common/components/icons/phosphor/PhRobot';
 // direct imports for all vendor icons - given we use them frequently, we won't consider lazy loading them
 import { AnthropicIcon } from '~/common/components/icons/vendors/AnthropicIcon';
 import { DeepseekIcon } from '~/common/components/icons/vendors/DeepseekIcon';
+import { EgregoreIcon } from '~/common/components/icons/vendors/EgregoreIcon';
 import { LMStudioIcon } from '~/common/components/icons/vendors/LMStudioIcon';
 import { LocalAIIcon } from '~/common/components/icons/vendors/LocalAIIcon';
 import { OllamaIcon } from '~/common/components/icons/vendors/OllamaIcon';
@@ -25,6 +26,7 @@ import { OpenRouterIcon } from '~/common/components/icons/vendors/OpenRouterIcon
  */
 const vendorIcons: Record<ModelVendorId, React.FunctionComponent<SvgIconProps>> = {
   ollama: OllamaIcon,
+  egregore: EgregoreIcon,
   localai: LocalAIIcon,
   lmstudio: LMStudioIcon,
 

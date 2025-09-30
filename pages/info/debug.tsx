@@ -128,7 +128,7 @@ function AppDebug() {
   const handleDownload = async () => {
     fileSave(
       new Blob([JSON.stringify({ client: cClient, agi: cProduct, backend: cBackend }, null, 2)], { type: 'application/json' }),
-      { fileName: `dapp-agi_debug_${prettyTimestampForFilenames()}.json`, extensions: ['.json'] },
+      { fileName: `Egregore_debug_${prettyTimestampForFilenames()}.json`, extensions: ['.json'] },
     )
       .then(() => setSaved(true))
       .catch(e => console.error('Error saving debug.json', e));

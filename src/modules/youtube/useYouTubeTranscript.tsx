@@ -21,7 +21,7 @@ export interface YTVideoTranscript {
 export async function youTubeGetVideoData(videoId: string): Promise<YouTubeVideoData> {
   if (USE_FRONTEND_FETCH) {
     // return fetchYouTubeTranscript(videoId, url => frontendSideFetch(url).then(res => res.text()));
-    throw new Error('dapp-AGI: Browser youtube transcript download is disabled.');
+    throw new Error('Egregore: Browser youtube transcript download is disabled.');
   }
   return apiAsync.youtube.getTranscript.query({ videoId });
 }

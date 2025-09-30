@@ -54,7 +54,7 @@ function _createDLLMFromModelDescription(d: ModelDescriptionSchema, service: DMo
   // DLLM is a fundamental type in our application
   const dllm: DLLM = {
 
-    // this id is Dapp-AGI specific, not the vendor's
+    // this id is Egregore specific, not the vendor's
     id: !d.idVariant ? `${service.id}-${d.id}`
       : `${service.id}-${d.id}-${d.idVariant}`,
 

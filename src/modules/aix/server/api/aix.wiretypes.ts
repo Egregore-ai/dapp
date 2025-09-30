@@ -4,6 +4,7 @@ import * as z from 'zod/v4';
 import type { DMessageToolResponsePart } from '~/common/stores/chat/chat.fragments';
 
 import { anthropicAccessSchema } from '~/modules/llms/server/anthropic/anthropic.router';
+import { egregoreAccessSchema } from '~/modules/llms/server/egregore/egregore.router';
 import { ollamaAccessSchema } from '~/modules/llms/server/ollama/ollama.router';
 import { openAIAccessSchema } from '~/modules/llms/server/openai/openai.router';
 
@@ -388,6 +389,7 @@ export namespace AixWire_API {
 
   export const Access_schema = z.discriminatedUnion('dialect', [
     anthropicAccessSchema,
+    egregoreAccessSchema,
     ollamaAccessSchema,
     openAIAccessSchema,
   ]);

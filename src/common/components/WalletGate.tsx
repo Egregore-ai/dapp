@@ -19,7 +19,7 @@ import Image from 'next/image';
 import { NodeSelectorStep } from '~/modules/llms/models-modal/NodeSelectorStep';
 import { useNodeChoice, nodeChoiceActions } from '~/common/stores/nodeChoice.store';
 
-const GITHUB_URL = 'https://github.com';
+const GITHUB_URL = 'https://github.com/Egregore-ai/';
 
 type Phase = 'preconnect' | 'select' | 'done';
 

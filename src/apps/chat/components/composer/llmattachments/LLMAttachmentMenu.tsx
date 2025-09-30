@@ -342,7 +342,7 @@ export function LLMAttachmentMenu(props: {
                   if (isDocPart(part)) {
                     return (
                       <Typography key={index} level='body-sm' sx={{ color: 'text.primary' }} startDecorator={<ReadMoreIcon sx={indicatorSx} />}>
-                        <span>{part.data.mimeType /* part.type: dapp-agi type, not source mime */} · {part.data.text.length.toLocaleString()} bytes ·&nbsp;</span>
+                        <span>{part.data.mimeType /* part.type: Egregore type, not source mime */} · {part.data.text.length.toLocaleString()} bytes ·&nbsp;</span>
                         <Chip component='span' size='sm' color='primary' variant='outlined' startDecorator={<VisibilityIcon />} onClick={(event) => handleViewDocPart(event, part)}>
                           view
                         </Chip>

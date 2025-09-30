@@ -38,7 +38,7 @@ const undoPanelGroupSx: React.CSSProperties = {
 
 
 /**
- * Core layout of dapp-AGI, used by all the Primary applications therein.
+ * Core layout of Egregore, used by all the Primary applications therein.
  *
  * Main functions:
  *  - modern responsive layout

@@ -43,6 +43,18 @@ export const createAppTheme = (uiComplexityMinimal: boolean) => extendTheme({
   colorSchemes: {
     light: {
       palette: {
+        primary: {
+          50: '#faf5ff',
+          100: '#f3e8ff',
+          200: '#e9d5ff',
+          300: '#d8b4fe',
+          400: '#c084fc',
+          500: '#8b5cf6',
+          600: '#7c3aed',
+          700: '#6b21a8',
+          800: '#581c87',
+          900: '#4c1d95',
+        },
         neutral: {
           plainColor: 'var(--joy-palette-neutral-800)',     // [700 -> 800] Dropdown menu: increase text contrast a bit
           solidBg: 'var(--joy-palette-neutral-700)',        // [500 -> 700] PageBar background & Button[solid]
@@ -68,6 +80,18 @@ export const createAppTheme = (uiComplexityMinimal: boolean) => extendTheme({
     },
     dark: {
       palette: {
+        primary: {
+          50: '#faf5ff',
+          100: '#f3e8ff',
+          200: '#e9d5ff',
+          300: '#d8b4fe',
+          400: '#c084fc',
+          500: '#8b5cf6',
+          600: '#7c3aed',
+          700: '#6b21a8',
+          800: '#581c87',
+          900: '#4c1d95',
+        },
         text: {
           // do not increase contrast - text.primary would scream at you
           // secondary: 'var(--joy-palette-neutral-100, #EAEEF6)',
@@ -119,7 +143,7 @@ export const createAppTheme = (uiComplexityMinimal: boolean) => extendTheme({
         badge: ({ ownerState }) =>
           // HACK: we set this to 'color-feature' to force the theming to our liking
           (ownerState.color as any) !== 'color-feature' ? undefined : ({
-            backgroundColor: '#0288D1',
+            backgroundColor: '#8b5cf6',
           }),
       },
     },

@@ -1,5 +1,6 @@
 import { ModelVendorAnthropic } from './anthropic/anthropic.vendor';
 import { ModelVendorDeepseek } from './deepseek/deepseekai.vendor';
+import { ModelVendorEgregore } from './egregore/egregore.vendor';
 import { ModelVendorLMStudio } from './lmstudio/lmstudio.vendor';
 import { ModelVendorLocalAI } from './localai/localai.vendor';
 import { ModelVendorOllama } from './ollama/ollama.vendor';
@@ -10,6 +11,7 @@ import type { IModelVendor } from './IModelVendor';
 
 export type ModelVendorId =
   | 'ollama'
+  | 'egregore'
   | 'localai'
   | 'lmstudio'
   | 'anthropic'
@@ -23,6 +25,7 @@ const MODEL_VENDOR_REGISTRY: Record<ModelVendorId, IModelVendor> = {
   localai: ModelVendorLocalAI,
   anthropic: ModelVendorAnthropic,
   deepseek: ModelVendorDeepseek,
+  egregore: ModelVendorEgregore,
   lmstudio: ModelVendorLMStudio,
   ollama: ModelVendorOllama,
   openai: ModelVendorOpenAI,

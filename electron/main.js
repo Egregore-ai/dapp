@@ -44,7 +44,7 @@ async function createWindow() {
   win = new BrowserWindow({
     width: 1280,
     height: 800,
-    title: 'dapp-AGI',
+    title: 'Egregore',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,

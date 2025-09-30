@@ -20,6 +20,22 @@ import { reactQueryClientSingleton } from '../app.queryclient';
 // configuration
 const VERCEL_WORKAROUND_EDGE_1MB_PAYLOAD_LIMIT = true;
 
+// Custom fetch with logging for debugging
+const loggedFetch = async (url: RequestInfo | URL, options?: RequestInit): Promise<Response> => {
+  console.log('tRPC Fetch Request:', url, options);
+  try {
+    const response = await fetch(url, options);
+    console.log('tRPC Fetch Response Status:', response.status, 'URL:', url);
+    if (!response.ok) {
+      console.error('tRPC Fetch Error Response:', response.statusText);
+    }
+    return response;
+  } catch (error) {
+    console.error('tRPC Fetch Network Error:', error, 'URL:', url);
+    throw error;
+  }
+};
+
 
 const enableLoggerLink = (opts: any) => {
   return process.env.NODE_ENV === 'development' ||
@@ -36,6 +52,7 @@ export const apiAsync = createTRPCClient<AppRouterEdge>({
     httpLink({
       url: `${getBaseUrl()}/api/edge`,
       transformer: transformer,
+      fetch: loggedFetch,
     }),
   ],
 });
@@ -56,6 +73,7 @@ export const apiQuery = createTRPCNext<AppRouterEdge>({
         httpLink({
           url: `${getBaseUrl()}/api/edge`,
           transformer: transformer,
+          fetch: loggedFetch,
           // You can pass any HTTP headers you wish here
           // async headers() {
           //   return {
@@ -85,6 +103,7 @@ export const apiStream = createTRPCClient<AppRouterEdge>({
     httpBatchStreamLink({
       url: `${getBaseUrl()}/api/edge`,
       transformer: transformer,
+      fetch: loggedFetch,
       /**
        * WORKAROUND:
        * Due to the fact that we are sending large payloads with images, and having a 1MB max payload size
@@ -106,6 +125,7 @@ export const apiAsyncNode = createTRPCClient<AppRouterCloud>({
     httpLink({
       url: `${getBaseUrl()}/api/cloud`,
       transformer: transformer,
+      fetch: loggedFetch,
     }),
   ],
 });
@@ -117,6 +137,7 @@ export const apiStreamNode = createTRPCClient<AppRouterCloud>({
     httpBatchStreamLink({
       url: `${getBaseUrl()}/api/cloud`,
       transformer: transformer,
+      fetch: loggedFetch,
       maxItems: 1, // to not wait for the last connection to close
     }),
   ],

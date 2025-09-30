@@ -468,10 +468,6 @@ export function ChatMessage(props: {
   // Bubble
 
   const closeBubble = React.useCallback((anchorEl?: HTMLElement, options?: { clearSelection?: boolean }) => {
-    // NOTE - we used to have this always on, which would remove the highlighted text, but it's fired too much and in particular
-    // it was corrupting the extension of text selection (http://github.com/enricoros/dapp-AGI/issues/788)
-    //
-    // However the likely expected user behavior here is to keep the selection, hence by default we don't clear it
     if (options?.clearSelection)
       window.getSelection()?.removeAllRanges?.();
     try {

@@ -114,9 +114,9 @@
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   margin: 0;
-  /* Dapp-AGI: Make sure a block is at least a rem tall */
+  /* Egregore: Make sure a block is at least a rem tall */
   min-height: 1em;
-  /* Dapp-AGI: Note: disabled because we have good CSS already */
+  /* Egregore: Note: disabled because we have good CSS already */
   /*color: var(--color-fg-default);*/
   /*background-color: var(--color-canvas-default);*/
   /*font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";*/
@@ -240,7 +240,7 @@
   border-bottom: 1px solid var(--color-border-muted);
   height: .25em;
   padding: 0;
-  /* dapp-AGI: was 24px -> 1.5em */
+  /* Egregore: was 24px -> 1.5em */
   margin: 1.5em 0;
   /*margin: 24px 0;*/
   background-color: var(--color-border-default);
@@ -384,7 +384,7 @@
 .markdown-body h4,
 .markdown-body h5,
 .markdown-body h6 {
-  /* dapp-AGI: changed this to be more flexible with changing Block font size */
+  /* Egregore: changed this to be more flexible with changing Block font size */
   margin-top: 1.2em;
   margin-bottom: 0.8em;
   /*margin-top: 24px;*/
@@ -500,7 +500,7 @@
   content: "";
 }
 
-/* dapp-AGI: NOTE: we are doing this only on the <p> tags because otherwise
+/* Egregore: NOTE: we are doing this only on the <p> tags because otherwise
    this collapses the space between blocks */
 .markdown-body>p:first-child {
   margin-top: 0 !important;
@@ -548,7 +548,7 @@
 .markdown-body pre,
 .markdown-body details {
   margin-top: 0;
-  /* dapp-AGI: was 16px -> 1em*/
+  /* Egregore: was 16px -> 1em*/
   margin-bottom: 1em;
   /*margin-bottom: 16px;*/
 }
@@ -561,7 +561,7 @@
   margin-bottom: 0;
 }
 
-/* dapp-AGI: even the margins if there are no siblings */
+/* Egregore: even the margins if there are no siblings */
 .markdown-body ul:first-child:last-child,
 .markdown-body ol:first-child:last-child {
   margin-top: 0.5em;

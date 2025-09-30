@@ -49,12 +49,6 @@ Before starting the implementation:
      - `/api/generate` for text generation
      - `/api/chat` for chat completions (optional)
 
-3. **big-AGI Source Code**
-   ```bash
-   git clone https://github.com/enricoros/big-AGI.git
-   cd big-AGI
-   npm install
-   ```
 
 ## Implementation Steps
 

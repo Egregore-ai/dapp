@@ -23,7 +23,7 @@ import { vendorHasBackendCap } from '../vendors/vendor.helpers';
 const ENABLE_DELETE_LAST = true;
 
 // Vendor filtering based on node choice
-const LOCAL_VENDORS = ['ollama', 'localai', 'lmstudio'];
+const LOCAL_VENDORS = ['ollama', 'egregore', 'localai', 'lmstudio'];
 const GLOBAL_VENDORS = ['openai', 'anthropic', 'deepseek', 'openrouter'];
 
 function vendorIcon(vendor: IModelVendor | null, greenMark: boolean) {
@@ -91,8 +91,8 @@ export function ModelsServiceSelector(props: {
       .filter(v => allowedVendors.includes(v.id)) // Filter based on node choice
       .sort((a, b) => {
         // Different sorting order for local vs global
-        const order: Record<string, number> = nodeChoice === 'own' 
-          ? { ollama: 1, localai: 2, lmstudio: 3 }
+        const order: Record<string, number> = nodeChoice === 'own'
+          ? { ollama: 1, egregore: 2, localai: 3, lmstudio: 4 }
           : { openai: 1, anthropic: 2, deepseek: 3, openrouter: 4 };
         return (order[a.id] || 999) - (order[b.id] || 999);
       })

@@ -8,6 +8,7 @@ import { findModelVendor, ModelVendorId } from '../vendors/vendors.registry';
 // direct imports for all vendor setup components - NOTE: we could lazy load if this becomes a performance issue
 import { AnthropicServiceSetup } from '../vendors/anthropic/AnthropicServiceSetup';
 import { DeepseekAIServiceSetup } from '../vendors/deepseek/DeepseekAIServiceSetup';
+import { EgregoreServiceSetup } from '../vendors/egregore/EgregoreServiceSetup';
 import { LMStudioServiceSetup } from '../vendors/lmstudio/LMStudioServiceSetup';
 import { LocalAIServiceSetup } from '../vendors/localai/LocalAIServiceSetup';
 import { OllamaServiceSetup } from '../vendors/ollama/OllamaServiceSetup';
@@ -22,6 +23,7 @@ import { OpenRouterServiceSetup } from '../vendors/openrouter/OpenRouterServiceS
  */
 const vendorSetupComponents: Record<ModelVendorId, React.ComponentType<{ serviceId: DModelsServiceId }>> = {
   ollama: OllamaServiceSetup,
+  egregore: EgregoreServiceSetup,
   anthropic: AnthropicServiceSetup,
   deepseek: DeepseekAIServiceSetup,
   lmstudio: LMStudioServiceSetup,

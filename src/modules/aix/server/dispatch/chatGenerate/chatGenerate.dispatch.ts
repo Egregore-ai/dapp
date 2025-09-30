@@ -1,4 +1,5 @@
 import { anthropicAccess } from '~/modules/llms/server/anthropic/anthropic.router';
+import { egregoreAccess } from '~/modules/llms/server/egregore/egregore.router';
 import { ollamaAccess } from '~/modules/llms/server/ollama/ollama.router';
 import { openAIAccess } from '~/modules/llms/server/openai/openai.router';
 
@@ -40,6 +41,26 @@ export function createChatGenerateDispatch(access: AixAPI_Access, model: AixAPI_
         },
         demuxerFormat: streaming ? 'fast-sse' : null,
         chatGenerateParse: streaming ? createAnthropicMessageParser() : createAnthropicMessageParserNS(),
+      };
+
+    /**
+     * Egregore has now an OpenAI compability layer for `chatGenerate` API, but still its own protocol for models listing.
+     * - as such, we 'cast' here to the dispatch to an OpenAI dispatch, while using Egregore access
+     * - we still use the egregore.router for the models listing and aministration APIs
+     *
+     * For reference we show the old code for body/demuxerFormat/chatGenerateParse also below
+     */
+    case 'egregore':
+      return {
+        request: {
+          ...egregoreAccess(access, '/v1/chat/completions'), // use the OpenAI-compatible endpoint
+          // body: egregoreChatCompletionPayload(model, _hist, access.egregoreJson, streaming),
+          body: aixToOpenAIChatCompletions('openai', model, chatGenerate, access.egregoreJson, streaming),
+        },
+        // demuxerFormat: streaming ? 'json-nl' : null,
+        demuxerFormat: streaming ? 'fast-sse' : null,
+        // chatGenerateParse: createDispatchParserEgregore(),
+        chatGenerateParse: streaming ? createOpenAIChatCompletionsChunkParser() : createOpenAIChatCompletionsParserNS(),
       };
 
     /**

@@ -4,7 +4,7 @@ import { mainnet } from 'wagmi/chains';
 
 const WALLETCONNECT_PROJECT_ID = process.env.NEXT_PUBLIC_WC_PROJECT_ID!;
 export const wagmiConfig = getDefaultConfig({
-  appName: 'dapp-AGI',
+  appName: 'Egregore',
   projectId: WALLETCONNECT_PROJECT_ID,
   chains: [mainnet],                 
   ssr: true,
